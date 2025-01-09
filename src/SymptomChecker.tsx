@@ -19,7 +19,6 @@ export default function SymptomChecker() {
   const [gender, setGender] = useState("");
   const [result, setResult] = useState<string | null>(null);
 
-  // Mock data
   const mockData = [
     {
       age: "17-29 years (Young adult)",
@@ -57,17 +56,17 @@ export default function SymptomChecker() {
 
   const handleChangeAge = (event: SelectChangeEvent) => {
     setAge(event.target.value);
-    setResult(null); // Clear previous result
+    setResult(null);
   };
 
   const handleChangeGender = (event: SelectChangeEvent) => {
     setGender(event.target.value);
-    setResult(null); // Clear previous result
+    setResult(null);
   };
 
   const handleChangeSymptoms = (event: SelectChangeEvent) => {
     setSymptoms(event.target.value);
-    setResult(null); // Clear previous result
+    setResult(null);
   };
 
   const handleCheck = () => {

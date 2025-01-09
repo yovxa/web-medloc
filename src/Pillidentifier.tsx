@@ -26,7 +26,6 @@ export default function PillIdentifier() {
     shape: string;
   } | null>(null);
 
-  // Mock database of pill data
   const pills = [
     {
       name: "Tramadol Hydrochloride",

@@ -19,7 +19,6 @@ const steps = ["Personal details", "Payment Method", "Confirm"];
 export default function CheckoutPage() {
   const [activeStep, setActiveStep] = React.useState(0);
 
-  // State to store form data
   const [formData, setFormData] = React.useState({
     name: "",
     Phonenumber: "",
@@ -48,9 +47,8 @@ export default function CheckoutPage() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    // Restrict non-numeric input for phone number
     if (name === "Phonenumber") {
-      const numericValue = value.replace(/\D/g, ""); // Remove non-numeric characters
+      const numericValue = value.replace(/\D/g, "");
       setFormData((prevData) => ({
         ...prevData,
         [name]: numericValue,
@@ -63,9 +61,7 @@ export default function CheckoutPage() {
     }
   };
 
-  // Define step content
   const stepContent = [
-    // Step 1: Personal Details Form
     <Box>
       <Typography variant="h6">Personal Details</Typography>
       <TextField
@@ -94,7 +90,6 @@ export default function CheckoutPage() {
         margin="normal"
       />
     </Box>,
-    // Step 2: Payment Method Form
     <Box>
       <Typography variant="h6">Payment Method</Typography>
       <FormControl component="fieldset">
@@ -118,11 +113,12 @@ export default function CheckoutPage() {
         </RadioGroup>
       </FormControl>
     </Box>,
-    // Step 3: Confirm and Review
     <Box>
       <Typography variant="h6">Confirm</Typography>
       <Typography variant="body1">Name: {formData.name}</Typography>
-      <Typography variant="body1">Phone number: {formData.Phonenumber}</Typography>
+      <Typography variant="body1">
+        Phone number: {formData.Phonenumber}
+      </Typography>
       <Typography variant="body1">Address: {formData.address}</Typography>
       <Typography variant="body1">
         Payment Method: {formData.paymentMethod}
@@ -169,7 +165,9 @@ export default function CheckoutPage() {
               onClick={handleNext}
               disabled={
                 (activeStep === 0 &&
-                  (!formData.name || !formData.Phonenumber || !formData.address)) ||
+                  (!formData.name ||
+                    !formData.Phonenumber ||
+                    !formData.address)) ||
                 (activeStep === 1 && !formData.paymentMethod)
               }
             >

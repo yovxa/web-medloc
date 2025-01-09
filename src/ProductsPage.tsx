@@ -66,7 +66,7 @@ export default function ProductsPage() {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<
     "Medicine" | "Cosmetics" | ""
-  >(""); // State for selected category
+  >("");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
 
@@ -83,8 +83,8 @@ export default function ProductsPage() {
   }, []);
 
   const handleAddToCart = (product: Product) => {
-    const currentUser = JSON.parse(localStorage.getItem("user") || "{}"); // Fetch the current user from localStorage
-    const userID = currentUser?.UserID; // Replace 'id' with the actual key for user ID in your user object
+    const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+    const userID = currentUser?.UserID;
 
     if (!userID) {
       alert("Please log in to add items to the cart.");
@@ -109,7 +109,7 @@ export default function ProductsPage() {
       })
       .then(() => {
         setCart((prevCart) => [
-          ...(Array.isArray(prevCart) ? prevCart : []), 
+          ...(Array.isArray(prevCart) ? prevCart : []),
           { CartID: Date.now(), Quantity: 1, Total_price: product.Price },
         ]);
         alert(`${product.Name} has been added to your cart.`);
@@ -118,7 +118,7 @@ export default function ProductsPage() {
         console.error("Error adding to cart:", error);
         alert("An error occurred. Please try again.");
       });
-  };  
+  };
 
   const filteredProducts = products.filter(
     (product) =>

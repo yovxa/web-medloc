@@ -57,7 +57,7 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 }));
 
 const SignIn: React.FC = () => {
-  const { setUser } = useUser(); // Context or Redux action
+  const { setUser } = useUser();
   const navigate = useNavigate();
 
   const [emailError, setEmailError] = React.useState(false);
@@ -109,9 +109,9 @@ const SignIn: React.FC = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setUser(data.user); // Update Redux state
-        localStorage.setItem("user", JSON.stringify(data.user)); // Sync with localStorage
-        navigate("/"); // Redirect to homepage
+        setUser(data.user);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        navigate("/");
       } else {
         const error = await response.json();
         alert(error.message || "Login failed");

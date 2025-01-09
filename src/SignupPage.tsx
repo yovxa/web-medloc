@@ -15,7 +15,6 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from "./userContext";
 import { SelectChangeEvent } from "@mui/material";
 
-// Styled components
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
@@ -45,12 +44,10 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
-// SignUp component
 const SignUp: React.FC = () => {
   const navigate = useNavigate();
   const { setUser } = useUser();
 
-  // Form state
   const [formData, setFormData] = React.useState({
     username: "",
     email: "",
@@ -61,7 +58,6 @@ const SignUp: React.FC = () => {
     address: "",
   });
 
-  // Error state
   const [errors, setErrors] = React.useState({
     username: "",
     email: "",
@@ -69,7 +65,6 @@ const SignUp: React.FC = () => {
     confirmPassword: "",
   });
 
-  // Handle input changes
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -77,7 +72,6 @@ const SignUp: React.FC = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle select changes
   const handleSelectChange = (
     e: SelectChangeEvent<string>,
     fieldName: string
@@ -135,7 +129,7 @@ const SignUp: React.FC = () => {
 
         if (response.ok) {
           alert("Signup successful!");
-          setUser(result.user); // Optionally update user context
+          setUser(result.user);
           navigate("/login");
         } else {
           alert(`Signup failed: ${result.message}`);

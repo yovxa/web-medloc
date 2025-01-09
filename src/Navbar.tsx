@@ -54,9 +54,9 @@ function ResponsiveAppBar() {
   };
 
   const handleLogout = () => {
-    dispatch(clearUser()); // Clear Redux state
-    localStorage.removeItem("user"); // Remove user from localStorage
-    navigate("/login"); // Redirect to login page
+    dispatch(clearUser());
+    localStorage.removeItem("user");
+    navigate("/login");
   };
 
   return (

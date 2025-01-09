@@ -1,34 +1,33 @@
 .card-flip-container {
-    perspective: 1000px; /* Enables 3D flip effect */
-  }
-  
-  .card-flip {
-    width: 350px;
-    height: 350px;
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform 0.6s;
-  }
-  
-  .card-flip-container:hover .card-flip {
-    transform: rotateY(180deg); /* Rotate 180 degrees on hover */
-  }
-  
-  .card-front,
-  .card-back {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    backface-visibility: hidden; /* Hides the reverse side when not flipped */
-    border-radius: 10px;
-  }
-  
-  .card-front {
-    z-index: 2; /* Ensure front is visible initially */
-    transform: rotateY(0deg);
-  }
-  
-  .card-back {
-    transform: rotateY(180deg); /* Position back side for flipping */
-  }
-  
+  perspective: 1000px;
+}
+
+.card-flip {
+  width: 350px;
+  height: 350px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+
+.card-flip-container:hover .card-flip {
+  transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  backface-visibility: hidden;
+  border-radius: 10px;
+}
+
+.card-front {
+  z-index: 2;
+  transform: rotateY(0deg);
+}
+
+.card-back {
+  transform: rotateY(180deg);
+}

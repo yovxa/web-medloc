@@ -1,4 +1,3 @@
-// src/contexts/UserContext.tsx
 import React, { createContext, useState, useContext } from "react";
 
 interface UserContextProps {

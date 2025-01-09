@@ -59,23 +59,22 @@ export default function CartPage() {
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const navigate = useNavigate();
 
-  // Retrieve the user ID from localStorage or a global state
   const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
-  const userID = currentUser?.UserID; // Replace 'id' with the actual key for user ID
+  const userID = currentUser?.UserID;
 
   function handleClick() {
     navigate("/checkout");
   }
 
   useEffect(() => {
-    console.log('Logged in userID:', userID);  // Add this line to debug
+    console.log("Logged in userID:", userID);
 
     if (!userID) {
       navigate("/login");
       return;
     }
 
-    fetch(`http://localhost:8081/cart?UserID=${userID}`) // Pass userID as query parameter
+    fetch(`http://localhost:8081/cart?UserID=${userID}`)
       .then((response) => response.json())
       .then((data) => {
         setCartItems(data);
@@ -94,11 +93,11 @@ export default function CartPage() {
           CartID: cartID,
           Quantity: newQuantity,
           userID,
-        }), // Include userID in the request body
+        }),
       })
         .then((response) => response.json())
         .then(() => {
-          fetch(`http://localhost:8081/cart?UserID=${userID}`) // Re-fetch cart for the current user
+          fetch(`http://localhost:8081/cart?UserID=${userID}`)
             .then((response) => response.json())
             .then((data) => {
               setCartItems(data);
