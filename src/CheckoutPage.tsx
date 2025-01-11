@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Stepper,
@@ -13,69 +13,113 @@ import {
   FormControlLabel,
   Radio,
 } from "@mui/material";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const steps = ["Personal details", "Payment Method", "Confirm"];
 
+interface Orders {
+  UserID: number;
+  CartID: number;
+  Name: string;
+  PhoneNumber: string;
+  Address: string;
+  Street: string;
+  BuildingNumber: string;
+  Payment: string;
+}
+
 export default function CheckoutPage() {
   const [activeStep, setActiveStep] = React.useState(0);
-
-  const [formData, setFormData] = React.useState({
-    name: "",
-    Phonenumber: "",
-    address: "",
-    paymentMethod: "",
+  const [formData, setFormData] = useState<Orders>({
+    UserID: 0,
+    CartID: 0,
+    Name: "",
+    PhoneNumber: "",
+    Address: "",
+    Street: "",
+    BuildingNumber: "",
+    Payment: "",
   });
+  const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+  const userID = currentUser?.UserID;
+  const Navigate = useNavigate();
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  useEffect(() => {
+    if (userID) {
+      fetch(`http://localhost:8081/orders?UserID=${userID}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setFormData(data);
+        })
+        .catch((error) => console.error("Error fetching order:", error));
+    }
+  }, [userID]);
+
+  const handleNext = async () => {
+    if (activeStep === steps.length - 1) {
+      await handleSubmit();
+    } else {
+      setActiveStep((prevStep) => prevStep + 1);
+    }
   };
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleReset = () => {
-    setActiveStep(0);
-    setFormData({
-      name: "",
-      Phonenumber: "",
-      address: "",
-      paymentMethod: "",
-    });
+    setActiveStep((prevStep) => prevStep - 1);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
-    if (name === "Phonenumber") {
-      const numericValue = value.replace(/\D/g, "");
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: numericValue,
-      }));
-    } else {
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
+  const handleSubmit = async () => {
+    const orderData = {
+      ...formData,
+      UserID: currentUser.UserID, // Ensure UserID is included
+      CartID: 1, // Ensure CartID is included (you may need to retrieve this value)
+    };
+
+    try {
+      const response = await fetch("http://localhost:8081/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (response.ok) {
+        const text = await response.text();
+        console.log(text);
+        Navigate("/");
+      } else {
+        console.error("There was an error inserting the data!");
+      }
+    } catch (error) {
+      console.error("There was an error inserting the data!", error);
     }
   };
 
   const stepContent = [
-    <Box>
+    <Box key="personal-details">
       <Typography variant="h6">Personal Details</Typography>
       <TextField
         label="Name"
-        name="name"
-        value={formData.name}
+        name="Name"
+        id="Name"
+        value={formData.Name}
         onChange={handleInputChange}
         fullWidth
         margin="normal"
       />
       <TextField
         label="Phone number"
-        name="Phonenumber"
-        value={formData.Phonenumber}
+        name="PhoneNumber"
+        id="PhoneNumber"
+        value={formData.PhoneNumber}
         onChange={handleInputChange}
         fullWidth
         margin="normal"
@@ -83,45 +127,69 @@ export default function CheckoutPage() {
       />
       <TextField
         label="Address"
-        name="address"
-        value={formData.address}
+        name="Address"
+        id="Address"
+        value={formData.Address}
+        onChange={handleInputChange}
+        fullWidth
+        margin="normal"
+      />
+      <TextField
+        label="Street"
+        name="Street"
+        id="Street"
+        value={formData.Street}
+        onChange={handleInputChange}
+        fullWidth
+        margin="normal"
+      />
+      <TextField
+        label="Building Number"
+        name="BuildingNumber"
+        id="BuildingNumber"
+        value={formData.BuildingNumber}
         onChange={handleInputChange}
         fullWidth
         margin="normal"
       />
     </Box>,
-    <Box>
+    <Box key="payment-method">
       <Typography variant="h6">Payment Method</Typography>
       <FormControl component="fieldset">
         <FormLabel component="legend">Select Payment Method</FormLabel>
         <RadioGroup
-          name="paymentMethod"
-          value={formData.paymentMethod}
+          name="Payment"
+          id="Payment"
+          value={formData.Payment || ""} // Ensure a controlled value (default to an empty string)
           onChange={handleInputChange}
         >
           <FormControlLabel
-            value="creditCard"
+            value="credit Card"
             control={<Radio />}
             label="Credit Card"
           />
           <FormControlLabel value="paypal" control={<Radio />} label="PayPal" />
           <FormControlLabel
-            value="cashOnDelivery"
+            value="cash On Delivery"
             control={<Radio />}
             label="Cash on Delivery"
           />
         </RadioGroup>
       </FormControl>
     </Box>,
-    <Box>
+    <Box key="confirm">
       <Typography variant="h6">Confirm</Typography>
-      <Typography variant="body1">Name: {formData.name}</Typography>
+      <Typography variant="body1">Name: {formData.Name}</Typography>
       <Typography variant="body1">
-        Phone number: {formData.Phonenumber}
+        Phone number: {formData.PhoneNumber}
       </Typography>
-      <Typography variant="body1">Address: {formData.address}</Typography>
+      <Typography variant="body1">Address: {formData.Address}</Typography>
+      <Typography variant="body1">Street: {formData.Street}</Typography>
       <Typography variant="body1">
-        Payment Method: {formData.paymentMethod}
+        Building Number: {formData.BuildingNumber}
+      </Typography>
+      <Typography variant="body1">
+        Payment Method: {formData.Payment}
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
         Please confirm your details before proceeding.
@@ -145,7 +213,7 @@ export default function CheckoutPage() {
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Box sx={{ flex: "1 1 auto" }} />
-            <Button onClick={handleReset}>Reset</Button>
+            <Button onClick={() => Navigate("/")}>Back to home</Button>
           </Box>
         </React.Fragment>
       ) : (
@@ -165,10 +233,10 @@ export default function CheckoutPage() {
               onClick={handleNext}
               disabled={
                 (activeStep === 0 &&
-                  (!formData.name ||
-                    !formData.Phonenumber ||
-                    !formData.address)) ||
-                (activeStep === 1 && !formData.paymentMethod)
+                  (!formData.Name ||
+                    !formData.PhoneNumber ||
+                    !formData.Address)) ||
+                (activeStep === 1 && !formData.Payment)
               }
             >
               {activeStep === steps.length - 1 ? "Finish" : "Next"}
