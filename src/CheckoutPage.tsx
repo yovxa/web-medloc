@@ -13,7 +13,7 @@ import {
   FormControlLabel,
   Radio,
 } from "@mui/material";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const steps = ["Personal details", "Payment Method", "Confirm"];
 
@@ -78,8 +78,8 @@ export default function CheckoutPage() {
   const handleSubmit = async () => {
     const orderData = {
       ...formData,
-      UserID: currentUser.UserID, // Ensure UserID is included
-      CartID: 1, // Ensure CartID is included (you may need to retrieve this value)
+      UserID: currentUser.UserID,
+      CartID: 1,
     };
 
     try {
@@ -160,7 +160,7 @@ export default function CheckoutPage() {
         <RadioGroup
           name="Payment"
           id="Payment"
-          value={formData.Payment || ""} // Ensure a controlled value (default to an empty string)
+          value={formData.Payment || ""}
           onChange={handleInputChange}
         >
           <FormControlLabel
