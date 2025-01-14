@@ -58,6 +58,8 @@ export default function CheckoutPage() {
   const handleNext = async () => {
     if (activeStep === steps.length - 1) {
       await handleSubmit();
+      setActiveStep((prevStep) => prevStep + 1);
+
     } else {
       setActiveStep((prevStep) => prevStep + 1);
     }
@@ -94,7 +96,6 @@ export default function CheckoutPage() {
       if (response.ok) {
         const text = await response.text();
         console.log(text);
-        Navigate("/");
       } else {
         console.error("There was an error inserting the data!");
       }
