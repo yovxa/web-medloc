@@ -20,6 +20,7 @@ export default function HomePage() {
           marginTop: 8,
           height: "100vh",
           flexDirection: "column",
+          position:'static',
         }}
       >
         <Box
